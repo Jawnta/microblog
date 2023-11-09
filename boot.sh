@@ -21,6 +21,5 @@ while true; do
     sleep 5
 done
 
-
 # Start the Gunicorn server and listen on port 5000
 exec gunicorn -b :5000 --access-logfile - --error-logfile - microblog:app
