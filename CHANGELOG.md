@@ -1,6 +1,30 @@
 # Changelog for microblog
 
-## Version 0.1.4 [Release]
+## Version 0.1.5 [Release]
+
+### Feature
+
+- **routes.py:**
+  - Update routes to use user's `followed_posts` instead of all posts to display only relevant content.
+  
+- **models.py:**
+  - Add `followers` table for many-to-many relationship between users, allowing users to follow and unfollow each other.
+  - Implement `follow`, `unfollow`, and `followed_posts` methods in User model to manage user relationships.
+
+### Style
+- **user.html:**
+  - Improve code readability and formatting in user.html template.
+
+### Refactor
+- **followers.py:**
+  - Add Alembic migration for the `followers` table.
+
+### Test
+- **test_followers.py:**
+  - Add unit tests for `follow`, `unfollow`, and `followed_posts` methods in the User model.
+
+
+## Version 0.1.4
 
 ### Feature
 
