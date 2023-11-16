@@ -6,4 +6,4 @@
     collections:
         - azure.azcollection
     roles:
-        - gather_vm_instances
+        - gather_instances

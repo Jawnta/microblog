@@ -23,15 +23,15 @@ To destroy instances use `ansible-playbook terminate_instances.yml`.
 
 #### Playbooks
 
-We have 4 playbooks `provision_instances`, `terminate_instances`, `gather_vm_instances`, `site`.
+We have 4 playbooks `provision_instances`, `terminate_instances`, `gather_instances`, `site`.
 
 **provision_instances** is used to create 3 servers on Azure together with their respective security groups, network settings and storage.   
 It Uses the roles provision_instances that waits for all of the security_groups to be created. It also connects the load balancers ip to your domain name.
 
 **gather__instances** fins all active virtual machines has an ip address connected to it and, adds them to the hosts. After we have run this playbook we can use the following hosts in other playbooks: 
-- `appServer` only the server for the app
+- `appserver` only the server for the app
 - `database` only for the database server
-- `loadBalancer` only the load balancer server
+- `loadbalancer` only the load balancer server
 
 **terminate_instances** destroys virtual machines and assets connected to it. You can choose which ones to remove by changing the `instances` variable inside its `vars/main.yml` file.
 
@@ -65,28 +65,9 @@ ssh-add ~/.ssh/azure
 
 #### Azure
 
-You need credentials from Azure to allow Ansible to manage servers. 
-This can be done by ether creating a file in your `$HOME/.azure/` folder called `credentials` or using ENV variables.
+You need credentials from Azure to allow Ansible to manage servers. Because we use 2fa we need Azure-CLI to login and get a authenticated token.
 
-The `credentials` requires you to add the login information together with the subscription id.
-The file should look like the following:
-
-```
-[default]
-ad_user=<acronym>@student.bth.se
-password=<password>
-subscription_id=<XXxxxxXX-XxxX-XxxX-XxxX-XXxxxXXXxxXX>
-```
-
-Replace `acronym` with your student acronym. The `password` should be the same you use to login in to azure. Your `subscription_id` can be found inside the *Information* box when overlooking your resource group on the website.
-
-The environmental variables uses the same values but slightly different keys:
-
-```
-export AZURE_AD_USER='acronym@student.bth.se'
-export AZURE_PASSWORD='<password>'
-export AZURE_SUBSCRIPTION_ID='<XXxxxxXX-XxxX-XxxX-XxxX-XXxxxXXXxxXX>'
-```
+Install [Azure-cli](https://learn.microsoft.com/sv-se/cli/azure/install-azure-cli-linux?pivots=apt) and run `az login`.
 
 
 
@@ -123,6 +104,10 @@ inventory                   = hosts
 
 [inventory]
 enable_plugins              = ini
+
+[ssh_connection]
+ssh_args =
+pipelining                  = True
 ```
 
 Needed the following for Ansible to read the `hosts` file (which parser it should use to read the file).
@@ -132,16 +117,7 @@ Needed the following for Ansible to read the `hosts` file (which parser it shoul
 enable_plugins = ini
 ```
 
-You might not need the last part of the config. Try running Ansible when removing the following part:
-
 ```
-[ssh_connection]
-ssh_args =
-```
-
-If you then get an error about "ssh and ControlSocket/permission denied for cp/ssh" add it again. You can read about the problem here, https://stackoverflow.com/a/41698903. There are supposed to be fixes for it but i can't get them to work.
-
-You can also try to add the line `pipelining                  = True`, last in the file, to see if it still works. If it works Ansible should be faster.
 
 
 
