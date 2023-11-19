@@ -1,12 +1,16 @@
 ---
 instances:
-    - name: appserver
-      type: appserver
-    - name: database
-      type: database
-    - name: loadbalancer
-      type: loadbalancer
+  - name: appserver1
+    type: appserver
+  - name: appserver2
+    type: appserver
+  - name: loadbalancer
+    type: loadbalancer
+  - name: database
+    type: database
 
 relative_names:
-    - name: www # www.<domain>
-    - name: "@" # so <domain> works as a URL. Otherwise only www.<domain> would work.
+  - name: www
+  - name: "@"
+  - name: appserver1
+  - name: appserver2

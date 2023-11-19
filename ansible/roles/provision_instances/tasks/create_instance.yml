@@ -24,6 +24,21 @@
         security_group: "{{ itype }}-sg"
         tags: "{{ vmtags }}"
 
+-   name: Ensure "A" records for app servers
+    azure_rm_dnsrecordset:
+        resource_group: "{{ resource_group }}"
+        relative_name: "{{ iname }}"
+        zone_name: "{{ domain_name }}"
+        record_type: A
+        state: present
+        records:
+            - entry: "{{ output_ip_address.state.ip_address }}"
+    when: iname == 'appserver1' or iname == 'appserver2'
+    loop: "{{ relative_names }}"
+    loop_control: 
+        loop_var: relative_name
+    delegate_to: 127.0.0.1
+
 -   name: Ensure "A" records for loadbalancer
     azure_rm_dnsrecordset:
         resource_group: "{{ resource_group }}"
@@ -49,7 +64,7 @@
         ssh_password_enabled: false
         ssh_public_keys:
             - path: "/home/{{ root_user }}/.ssh/authorized_keys"
-              key_data: "{{ lookup('file', pub_ssh_key_location) }}"
+              key_data: "{{ lookup('file', pub_ssh_key_location[0]) }}"
         vm_size: Standard_B1s
         network_interfaces: "{{ iname }}-NIC"
         managed_disk_type: Standard_LRS

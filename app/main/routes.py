@@ -8,7 +8,9 @@ from app import db
 from app.main.forms import EditProfileForm, PostForm
 from app.models import User, Post
 from app.main import bp
+import os
 
+APP_VERSION = os.environ.get('APP_VERSION', 'unknown')
 
 
 @bp.before_request
@@ -122,3 +124,11 @@ def unfollow(username):
     db.session.commit()
     flash(f'You are not following {username}.')
     return redirect(url_for('main.user', username=username))
+
+
+@bp.route('/version')
+def version():
+    """
+    Route for getting the current version of the application
+    """
+    return {"version": APP_VERSION}

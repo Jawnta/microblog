@@ -1,0 +1,58 @@
+- name: Install common packages
+  apt:
+    name:
+      - nginx
+      - gnupg
+      - software-properties-common
+      - certbot
+      - python3-certbot-nginx
+    state: latest
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Update apt cache (Ubuntu/Debian)
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: Obtain SSL certificate
+  shell: |
+    certbot --nginx --non-interactive --agree-tos --email {{ admin_email }} --domain {{ domain_name }} --redirect
+  args:
+    creates: /etc/letsencrypt/live/{{ domain_name }}
+  ignore_errors: true
+
+- name: Configure Nginx
+  block:
+    - name: Remove default Nginx configuration file
+      file:
+        path: /etc/nginx/nginx.conf
+        state: absent
+
+    - name: Remove Nginx default site configuration
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Copy new Nginx configuration file
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/nginx.conf
+      notify:
+        - restart nginx
+
+    - name: Copy load balancer configuration file
+      template:
+        src: loadbalancer.conf.j2
+        dest: /etc/nginx/sites-available/load-balancer.conf
+      notify:
+        - restart nginx
+
+    - name: Enable Nginx site configuration
+      file:
+        src: /etc/nginx/sites-available/load-balancer.conf
+        dest: /etc/nginx/sites-enabled/load-balancer.conf
+        state: link
+      notify:
+        - restart nginx
+  when: ansible_facts['os_family'] == "Debian"

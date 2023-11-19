@@ -1,2 +1,6 @@
 [local]
 localhost ansible_connection=local
+
+[appserver]
+appserver1.microbloggu.me
+appserver2.microbloggu.me

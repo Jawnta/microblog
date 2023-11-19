@@ -2,8 +2,11 @@
 
 source .venv/bin/activate
 
+# Default DB host will be used if DATABASE_HOST is not set
+DB_HOST=${DATABASE_HOST:-default_db_host}
+
 # Wait for the database server to be ready
-until nc -z -v -w30 db 3306
+until nc -z -v -w30 $DB_HOST 3306
 do
   echo "Waiting for database server to start..."
   # Wait for 5 seconds before checking again

@@ -1,0 +1,7 @@
+- name: Install Docker and pip3
+  apt:
+    name:
+      - docker.io
+      - python3-pip
+    state: present
+    update_cache: yes
