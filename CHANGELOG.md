@@ -1,6 +1,25 @@
 # Changelog for microblog
 
-## [0.2.0] [Release]
+## [0.2.2] [Release]
+### Refactored
+- Removed commented verification tasks in `ansible/roles/appserver/tasks/main.yml` for clarity.
+
+### Style
+- Corrected typo in the Sign In header in `app/templates/auth/login.html` for better readability.
+
+### Tests
+- Added `test_version.py` to validate the version route response in `tests/unit/main/routes`.
+
+## [0.2.1]
+### Updated
+- Added `DATABASE_HOST` configuration to `ansible/roles/appserver/tasks/main.yml` to use `database.microbloggu.me`.
+- Added 'database' group with `database.microbloggu.me` as a host in `ansible/hosts`.
+- Replaced direct database host reference with `DATABASE_HOST` variable in `ansible/roles/appserver/tasks`.
+- Installed Docker SDK for Python (docker) using pip3 in `ansible/roles/docker_install/tasks`.
+- Added task to ensure 'A' records for database in `create_instance.yml`.
+
+
+## [0.2.0]
 
 ### Added
 - Ansible playbook execution for app server setup in the deployment workflow (`cd.yml`).
