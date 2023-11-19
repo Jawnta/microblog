@@ -9,6 +9,7 @@
     image: "{{ docker_image_tag }}"
     state: started
     restart_policy: always
+    pull: true
     env:
       MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT_PASSWORD }}"
       MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
