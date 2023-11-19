@@ -1,0 +1,15 @@
+  - name: Start MySQL container
+    docker_container:
+      name: mysql
+      image: mysql:5.7
+      state: started
+      restart_policy: always
+      env:
+        MYSQL_ROOT_PASSWORD: dbwebbDevops
+        MYSQL_DATABASE: microblog-db
+        MYSQL_USER: microblog-DB_USER
+        MYSQL_PASSWORD: dettaervoratpw
+      volumes:
+        - db_data:/var/lib/mysql
+      ports:
+        - "3306:3306"

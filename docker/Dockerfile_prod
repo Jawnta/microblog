@@ -1,5 +1,10 @@
 # syntax=docker/dockerfile:1.4
 FROM python:3.8-alpine
+
+# Add a build argument for the application version
+ARG APP_VERSION=unknown
+ENV APP_VERSION=${APP_VERSION}
+
 RUN adduser -D microblog
 
 WORKDIR /home/microblog
