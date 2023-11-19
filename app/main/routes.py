@@ -131,4 +131,6 @@ def version():
     """
     Route for getting the current version of the application
     """
-    return {"version": APP_VERSION}
+    version_with_prefix = APP_VERSION
+    clean_version = version_with_prefix.replace('jawnta/microblog:', '')
+    return {"version": clean_version}
