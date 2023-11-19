@@ -12,5 +12,3 @@ instances:
 relative_names:
   - name: www
   - name: "@"
-  - name: appserver1
-  - name: appserver2
