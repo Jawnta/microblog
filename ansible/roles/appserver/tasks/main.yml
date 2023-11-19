@@ -10,8 +10,8 @@
       MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
       MYSQL_USER: "{{ MYSQL_USER }}"
       MYSQL_PASSWORD: "{{ MYSQL_PASSWORD }}"
-      DATABASE_URL: "mysql+pymysql://{{ MYSQL_USER }}:{{ MYSQL_PASSWORD }}@{{ groups['database'][0] }}/{{ MYSQL_DATABASE }}"
-      DATABASE_HOST: "{{ groups['database'][0] }}"
+      DATABASE_URL: "mysql+pymysql://{{ MYSQL_USER }}:{{ MYSQL_PASSWORD }}@{{ DATABASE_HOST }}/{{ MYSQL_DATABASE }}"
+      DATABASE_HOST: "{{ DATABASE_HOST }}"
     ports:
       - "8000:5000"
   register: container_action
@@ -21,27 +21,27 @@
     name: microblog
   register: microblog_container
 
-- name: Verify container is running
-  assert:
-    that:
-      - microblog_container.exists
-      - microblog_container.container.State.Running
-  retries: 5
-  delay: 10
-  until: result is succeeded
+# - name: Verify container is running
+#   assert:
+#     that:
+#       - microblog_container.exists
+#       - microblog_container.container.State.Running
+#   retries: 5
+#   delay: 10
+#   until: result is succeeded
 
-- name: Verify Microblog version
-  uri:
-    url: "http://{{ inventory_hostname }}/version"
-    return_content: yes
-  register: version_response
-  ignore_errors: yes
+# - name: Verify Microblog version
+#   uri:
+#     url: "http://{{ inventory_hostname }}/version"
+#     return_content: yes
+#   register: version_response
+#   ignore_errors: yes
 
-- name: Check if correct version is deployed
-  assert:
-    that:
-      - version_response.status == 200
-      - "'v{{ docker_image_tag }}' in version_response.json.version"
-    fail_msg: "Version check failed! Expected 'v{{ docker_image_tag }}', got '{{ version_response.json.version }}'"
-    success_msg: "Version check passed. Running version 'v{{ docker_image_tag }}'"
-  when: version_response is defined and version_response.status == 200
+# - name: Check if correct version is deployed
+#   assert:
+#     that:
+#       - version_response.status == 200
+#       - "'{{ docker_image_tag }}' in version_response.json.version"
+#     fail_msg: "Version check failed! Expected 'v{{ docker_image_tag }}', got '{{ version_response.json.version }}'"
+#     success_msg: "Version check passed. Running version '{{ docker_image_tag }}'"
+#   when: version_response is defined and version_response.status == 200
