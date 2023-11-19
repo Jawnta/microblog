@@ -10,6 +10,7 @@
     state: started
     restart_policy: always
     pull: true
+    recreate: yes
     env:
       MYSQL_ROOT_PASSWORD: "{{ MYSQL_ROOT_PASSWORD }}"
       MYSQL_DATABASE: "{{ MYSQL_DATABASE }}"
