@@ -1,5 +1,28 @@
 # Changelog for microblog
 
+## [0.2.0] [Release]
+
+### Added
+- Ansible playbook execution for app server setup in the deployment workflow (`cd.yml`).
+- Dynamic docker image tagging for deployment (`cd.yml`).
+- New Ansible playbooks for appserver, database, and load balancer setup.
+- Docker installation and Nginx configuration roles in Ansible.
+- DNS record setup for enhanced instance provisioning in Ansible.
+- Version endpoint in `routes.py` to expose current application version.
+- Additional dependencies for deployment configuration in `requirements.txt`.
+
+### Changed
+- Service port mapping in `docker-compose.yml` to align with Nginx setup.
+- Integration of application version as a build argument in `Dockerfile_prod`.
+
+### Fixed
+- SSH command with correct key path in `Makefile`.
+
+### Refactored
+- Deployment workflow to include SSH setup and Ansible (`cd.yml`).
+- Group variables with specific deployment details in Ansible.
+- Database host configuration to allow dynamic setup in `boot.sh`.
+
 ## Version 0.1.5 [Release]
 
 ### Feature
