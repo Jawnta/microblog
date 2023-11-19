@@ -2,8 +2,8 @@
 localhost ansible_connection=local
 
 [appserver]
-appserver1.microbloggu.me
-appserver2.microbloggu.me
+appserver1.microbloggu.me ansible_user=deploy
+appserver2.microbloggu.me ansible_user=deploy
 
 [database]
-database.microbloggu.me
+database.microbloggu.me ansible_user=deploy
