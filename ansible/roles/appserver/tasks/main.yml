@@ -6,7 +6,7 @@
 - name: Start or update Microblog container
   docker_container:
     name: microblog
-    image: "{{ docker_image_tag }}"
+    image: jawnta/microblog:v0.2.2
     state: started
     restart_policy: always
     pull: true

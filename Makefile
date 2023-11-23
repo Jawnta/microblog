@@ -215,3 +215,9 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	cd ansible && ansible-galaxy install -r requirements.yml
+
+# target: bandit                      - Run Bandit to check for security issues in the code
+.PHONY: bandit
+bandit:
+	@$(ECHO) "$(ACTION)---> Running Bandit to check for security issues" "$(NO_COLOR)"
+	@bandit -r app
