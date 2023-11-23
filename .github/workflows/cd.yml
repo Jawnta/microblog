@@ -7,6 +7,7 @@ on:
 jobs:
   ci:
     uses: ./.github/workflows/main.yml
+    uses: ./github/workflows/cs.yml
 
   deploy:
     runs-on: ubuntu-latest
