@@ -28,6 +28,7 @@
         src: files/apt_periodic_50
         dest: /etc/apt/apt.conf.d/50unattended-upgrades
 
+  
 -   name: Create user
     user:
         name: "{{ server_user }}"
@@ -51,6 +52,18 @@
         line: "{{ server_user }} ALL=(ALL) NOPASSWD:ALL"
         state: present
         validate: '/usr/sbin/visudo -cf %s' # kan få fel med line "{{ server_user }} testing"
+
+-   name: Remove default sshd_config
+    file:
+        path: /etc/ssh/sshd_config
+        state: absent
+
+-   name: Copy new sshd configuration file
+    template:
+        src: sshd_config.j2
+        dest: /etc/ssh/sshd_config
+    notify:
+        - restart ssh
 
 -   name: Disallow root and password ssh access
     lineinfile:

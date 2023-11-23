@@ -215,3 +215,22 @@ install-test:
 install-deploy:
 	${pip} install -r requirements/deploy.txt
 	cd ansible && ansible-galaxy install -r requirements.yml
+
+# target: bandit                      - Run Bandit to check for security issues in the code
+.PHONY: bandit
+bandit:
+	@$(ECHO) "$(ACTION)---> Running Bandit to check for security issues" "$(NO_COLOR)"
+	@bandit -r app
+
+.PHONY: scan-image
+scan-image:
+	trivy image --scanners vuln,secret,config jawnta/microblog:v0.2.3
+
+.PHONY: scan-repo
+scan-repo:
+	trivy fs --scanners vuln,secret,config --skip-dirs "./venv" ./
+
+.PHONY: scan-docker-image
+scan-docker-image:
+	dockle jawnta/microblog:v0.2.3
+

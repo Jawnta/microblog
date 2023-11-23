@@ -4,6 +4,10 @@ FROM python:3.8-alpine
 # Add a build argument for the application version
 ARG APP_VERSION=unknown
 ENV APP_VERSION=${APP_VERSION}
+ENV DOCKER_CONTENT_TRUST=1
+
+# Upgrade libcrypto and other outdated packages
+RUN apk update && apk upgrade && apk add --no-cache libcrypto3
 
 RUN adduser -D microblog
 
@@ -14,9 +18,19 @@ COPY migrations migrations
 COPY requirements requirements
 COPY requirements.txt microblog.py boot.sh ./
 
-RUN python -m venv .venv && .venv/bin/pip3 install -r requirements.txt
+# Set up virtual environment and upgrade pip and setuptools within it
+RUN python -m venv .venv \
+    && .venv/bin/pip install --upgrade pip setuptools \
+    && .venv/bin/pip install -r requirements.txt
+
+RUN python -m pip install --upgrade pip
+RUN pip install --upgrade setuptools
 
 ENV FLASK_APP microblog.py
+
+# Add HEALTHCHECK (modify the CMD to suit your application)
+HEALTHCHECK --interval=5m --timeout=3s \
+  CMD wget --quiet --tries=1 --spider http://localhost:5000/ || exit 1
 
 RUN chmod +x boot.sh && chown -R microblog:microblog ./
 
