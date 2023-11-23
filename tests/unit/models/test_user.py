@@ -39,6 +39,10 @@ def test_avatar(test_app, user1):
     """
     Test creation of Gravatar URL
     """
-    assert user1.avatar(128) == ('https://www.gravatar.com/avatar/'
-                                 'd4c74594d841139328695756648b6bd6'
-                                 '?d=retro&s=128')
+    import hashlib
+
+    email_hash = hashlib.sha256(user1.email.lower().encode('utf-8')).hexdigest()
+    expected_url = f'https://www.gravatar.com/avatar/{email_hash}?d=retro&s=128'
+
+    assert user1.avatar(128) == expected_url
+
