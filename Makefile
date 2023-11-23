@@ -221,3 +221,16 @@ install-deploy:
 bandit:
 	@$(ECHO) "$(ACTION)---> Running Bandit to check for security issues" "$(NO_COLOR)"
 	@bandit -r app
+
+.PHONY: scan-image
+scan-image:
+	trivy image --scanners vuln,secret,config jawnta/microblog:v0.2.3
+
+.PHONY: scan-repo
+scan-repo:
+	trivy fs --scanners vuln,secret,config --skip-dirs "./venv" ./
+
+.PHONY: scan-docker-image
+scan-docker-image:
+	dockle jawnta/microblog:v0.2.3
+
