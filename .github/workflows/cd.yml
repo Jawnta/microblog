@@ -35,7 +35,7 @@ jobs:
 
     - name: Run Ansible Playbook
       run: |
-        ansible-playbook -i ./ansible/hosts ./ansible/appserver.yml -e "docker_image_tag=${{ steps.meta.outputs.tags }}"
+        ansible-playbook -i ./ansible/hosts ./ansible/appserver.yml -e "docker_image_tag=jawnta/microblog:$RELEASE_TAG"
 
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
