@@ -12,11 +12,7 @@
 
 
 
--   name: create security groups
-    hosts: local
-    gather_facts: False
-    roles: 
-        - security_groups
+
 
 
 
@@ -38,3 +34,10 @@
         - azure.azcollection
     roles:
         - provision_instances
+        
+-   name: create security groups
+    hosts: local
+    gather_facts: False
+    roles: 
+        - gather_instances
+        - security_groups

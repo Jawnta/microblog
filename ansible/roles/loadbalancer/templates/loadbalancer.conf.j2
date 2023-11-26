@@ -1,4 +1,6 @@
 http {
+    # Hide Nginx version for security
+    server_tokens off;
     # Upstream definition
     upstream app-hosts {
         {% for host in groups['appserver'] %}
@@ -25,7 +27,13 @@ http {
         ssl_certificate /etc/letsencrypt/live/{{ domain_name }}/cert.pem;
         ssl_certificate_key /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
         ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains";
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Frame-Options "SAMEORIGIN";  # Anti-clickjacking header
+        add_header X-Content-Type-Options "nosniff";  # Prevent MIME sniffing
+        add_header Permissions-Policy "interest-cohort=()";  # Permissions policy
+
+        # Set Secure flag on cookies
+        proxy_cookie_path / "/; secure";
 
         # Proxy to upstream
         location / {

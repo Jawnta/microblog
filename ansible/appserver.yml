@@ -7,7 +7,7 @@
     MYSQL_DATABASE: microblog-db
     MYSQL_USER: microblog-DB_USER
     MYSQL_PASSWORD: dettaervoratpw
-    docker_image_tag: "v0.2.0"  # kan överstyras vid exekvering
+    docker_image_tag: jawnta/microblog:v0.2.3  # kan överstyras vid exekvering
     DATABASE_HOST: database.microbloggu.me
   remote_user: deploy
   become: yes
