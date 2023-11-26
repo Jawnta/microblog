@@ -7,11 +7,12 @@ on:
 jobs:
   ci:
     uses: ./.github/workflows/main.yml
-    uses: ./github/workflows/cs.yml
+  cs:
+    uses: ./.github/workflows/cs.yml
 
   deploy:
     runs-on: ubuntu-latest
-    needs: ci
+    needs: [ci, cs]
 
     steps:
     - name: Checkout code
