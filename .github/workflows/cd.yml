@@ -5,7 +5,7 @@ on:
     workflows: ["Continuous Integration", "Run security tests"]
     types: 
       - completed
-    branches: [ main ]
+    branches: [ master ]
   release:
     types: [created]
 
