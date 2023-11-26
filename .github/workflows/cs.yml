@@ -1,7 +1,6 @@
 name: Run security tests
 
 on:
-  workflow_call:
   release:
     types: [created]
 
