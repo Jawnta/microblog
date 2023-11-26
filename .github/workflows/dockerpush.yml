@@ -1,6 +1,11 @@
 name: Docker build and push
 
 on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types: 
+      - completed
+    branches: [ main ]
   release:
     types: [created]
   
@@ -37,3 +42,4 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
         build-args: APP_VERSION=${{ steps.meta.outputs.tags }}
+
