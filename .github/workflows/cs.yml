@@ -1,13 +1,7 @@
 name: Run security tests
 
 on:
-  workflow_run:
-    workflows: ["Docker build and push"]
-    types: 
-      - completed
-    branches: [ master ]
-  release:
-    types: [created]
+  workflow_call:
 
 jobs:
   cs:
@@ -55,4 +49,3 @@ jobs:
 
     - name: Run Dockle for Docker image
       run: dockle ${{ steps.meta.outputs.tags }}
-
