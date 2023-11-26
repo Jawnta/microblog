@@ -1,5 +1,27 @@
 # Changelog for microblog
 
+## [0.2.3]
+### Fixed
+- Update Flask-Login to version 0.6.3 in `prod.txt`.
+- Update Flask-WTF to version 1.2.1 in `prod.txt`.
+- Remove default `sshd_config` and copy new SSHD configuration file in Ansible.
+
+### Added
+- Add workflow to run security tests using Bandit, Trivy, and Dockle in `.github/workflows/cs.yml`.
+- Set `DOCKER_CONTENT_TRUST=1` for content trust, and upgrade `libcrypto` in `docker/Dockerfile_prod`.
+- Add new targets for scanning Docker image and repository in `Makefile`.
+- Add 'bandit' target to `Makefile` for running Bandit for security code analysis.
+- Add 'bandit' to test dependencies in `requirements/test.txt`.
+
+### Updated
+- Update test_avatar to use secure email hashing with hashlib in `models`.
+- Add reference to new security tests workflow in `.github/workflows/cd.yml`.
+- Bump Flask to version 2.3.2 and Werkzeug to version 2.3.8 in `requirements/prod.txt`.
+
+### Refactored
+- Replace md5 with sha256 for Gravatar URL generation in `models.py` to enhance security.
+
+
 ## [0.2.2] [Release]
 ### Refactored
 - Removed commented verification tasks in `ansible/roles/appserver/tasks/main.yml` for clarity.
