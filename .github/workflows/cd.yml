@@ -28,6 +28,10 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.azure_ssh_key_priv }}
 
+    - name: Extract GitHub Release Tag
+      id: extract-tag
+      run: echo "RELEASE_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      
     - name: Install Ansible
       run: |
         sudo apt-get update
