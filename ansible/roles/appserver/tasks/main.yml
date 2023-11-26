@@ -1,12 +1,8 @@
 ---
-- name: Debug docker_image_tag
-  debug:
-    msg: "The docker_image_tag is {{ docker_image_tag }}"
-
 - name: Start or update Microblog container
   docker_container:
     name: microblog
-    image: jawnta/microblog:v0.2.2
+    image: {{ docker_image_tag }}
     state: started
     restart_policy: always
     pull: true
