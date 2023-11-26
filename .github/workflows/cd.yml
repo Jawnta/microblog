@@ -10,6 +10,11 @@ jobs:
   dockerpush:
     uses: ./.github/workflows/dockerpush.yml
     needs: ci
+    credentials:
+      username: ${{ secrets.DOCKER_USERNAME }}
+      password: ${{ secrets.DOCKER_PASSWORD }}
+    outputs:
+      docker_image_tag: ${{ steps.meta.outputs.tags }}
   cs:
     uses: ./.github/workflows/cs.yml
     needs: dockerpush
@@ -22,29 +27,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Log in to DockerHub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
-    - name: Extract metadata (tags, labels) for Docker
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: jawnta/microblog
-
-    - name: Build and push Docker image
-      uses: docker/build-push-action@v5
-      with:
-        context: .
-        file: ./docker/Dockerfile_prod
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-        build-args: APP_VERSION=${{ steps.meta.outputs.tags }}
-
-
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
@@ -55,8 +37,11 @@ jobs:
         sudo apt-get update
         sudo apt-get install ansible -y
 
+    # - name: Run Ansible Playbook
+    #   run: |
+    #     ansible-playbook -i ./ansible/hosts ./ansible/appserver.yml -e "docker_image_tag=${{ steps.meta.outputs.tags }}"
     - name: Run Ansible Playbook
-      run: |
-        ansible-playbook -i ./ansible/hosts ./ansible/appserver.yml -e "docker_image_tag=${{ steps.meta.outputs.tags }}"
+      run: ansible-playbook -i ./ansible/hosts ./ansible/appserver.yml -e "docker_image_tag=${{ needs.dockerpush.outputs.docker_image_tag }}"
+
       env:
         ANSIBLE_HOST_KEY_CHECKING: "False"
