@@ -11,7 +11,7 @@ jobs:
     uses: ./.github/workflows/dockerpush.yml
     needs: ci
   cs:
-    uses: ./github/workflows/cs.yml
+    uses: ./.github/workflows/cs.yml
     needs: dockerpush
 
   deploy:
