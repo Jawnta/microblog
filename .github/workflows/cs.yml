@@ -17,42 +17,42 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.8
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: jawnta/microblog
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: jawnta/microblog
 
-      - name: Install Bandit
-        run: pip install bandit
+    - name: Install Bandit
+      run: pip install bandit
 
-      - name: Run Bandit
-        run: bandit -r app
+    - name: Run Bandit
+      run: bandit -r app
 
-      - name: Download and install Trivy
-        run: |
+    - name: Download and install Trivy
+      run: |
           wget https://github.com/aquasecurity/trivy/releases/download/v0.47.0/trivy_0.47.0_Linux-64bit.tar.gz
           tar zxvf trivy_0.47.0_Linux-64bit.tar.gz
           sudo mv trivy /usr/local/bin/trivy
           rm trivy_0.47.0_Linux-64bit.tar.gz
 
-      - name: Scan Docker image with Trivy
-        run: trivy image --scanners vuln,secret,config ${{ steps.meta.outputs.tags }}
+    - name: Scan Docker image with Trivy
+      run: trivy image --scanners vuln,secret,config ${{ steps.meta.outputs.tags }}
 
-      - name: Scan repository with Trivy
-        run: trivy fs --scanners vuln,secret,config --skip-dirs "./venv" ./
+    - name: Scan repository with Trivy
+      run: trivy fs --scanners vuln,secret,config --skip-dirs "./venv" ./
 
-      - name: Install Dockle
-        run: |
+    - name: Install Dockle
+      run: |
           wget https://github.com/goodwithtech/dockle/releases/download/v0.4.13/dockle_0.4.13_Linux-64bit.tar.gz
           tar xzvf dockle_0.4.13_Linux-64bit.tar.gz
           sudo mv dockle /usr/local/bin/
 
-      - name: Run Dockle for Docker image
-        run: dockle ${{ steps.meta.outputs.tags }}
+    - name: Run Dockle for Docker image
+      run: dockle ${{ steps.meta.outputs.tags }}
 
