@@ -1,19 +1,21 @@
 name: Run security tests
 
 on:
+  workflow_run:
+    workflows: ["Docker build and push"]
+    types: 
+      - completed
+    branches: [ main ]
   release:
     types: [created]
 
 jobs:
-  dockerpush:
-    uses: ./.github/workflows/dockerpush.yml
   cs:
     runs-on: ubuntu-latest
-    needs: dockerpush
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+    - name: Checkout Repository
+      uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
