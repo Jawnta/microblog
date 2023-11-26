@@ -51,4 +51,4 @@ jobs:
           sudo mv dockle /usr/local/bin/
 
     - name: Run Dockle for Docker image
-      run: dockle ${{ steps.meta.outputs.tags }}
+      run: dockle jawnta/microblog:$RELEASE_TAG
