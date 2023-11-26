@@ -21,6 +21,10 @@ jobs:
       with:
         images: jawnta/microblog
 
+    - name: Extract GitHub Release Tag
+      id: extract-tag
+      run: echo "RELEASE_TAG=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+
     - name: Install Bandit
       run: pip install bandit
 
@@ -35,8 +39,8 @@ jobs:
           rm trivy_0.47.0_Linux-64bit.tar.gz
 
     - name: Scan Docker image with Trivy
-      run: trivy image --scanners vuln,secret,config ${{ steps.meta.outputs.tags }}
-
+      run: trivy image --scanners vuln,secret,config jawnta/microblog:$RELEASE_TAG
+      
     - name: Scan repository with Trivy
       run: trivy fs --scanners vuln,secret,config --skip-dirs "./venv" ./
 
