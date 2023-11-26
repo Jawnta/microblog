@@ -5,7 +5,7 @@ on:
     workflows: ["Docker build and push"]
     types: 
       - completed
-    branches: [ main ]
+    branches: [ master ]
   release:
     types: [created]
 
