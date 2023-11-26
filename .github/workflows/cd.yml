@@ -10,9 +10,7 @@ jobs:
   dockerpush:
     uses: ./.github/workflows/dockerpush.yml
     needs: ci
-    credentials:
-      username: ${{ secrets.DOCKER_USERNAME }}
-      password: ${{ secrets.DOCKER_PASSWORD }}
+    secrets: inherit
     outputs:
       docker_image_tag: ${{ steps.meta.outputs.tags }}
   cs:
