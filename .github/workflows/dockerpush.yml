@@ -2,14 +2,15 @@ name: Docker build and push
 
 on:
   workflow_call:
+  credentials:
+    username:
+        required: true
+    password:
+        required: true
   
 jobs:
-  ci:
-    uses: ./.github/workflows/main.yml
-
   deploy:
     runs-on: ubuntu-latest
-    needs: ci
 
     steps:
     - name: Checkout code
@@ -18,8 +19,8 @@ jobs:
     - name: Log in to DockerHub
       uses: docker/login-action@v3
       with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        username: ${{ credentials.username }}
+        password: ${{ credentials.password }}
 
     - name: Extract metadata (tags, labels) for Docker
       id: meta
