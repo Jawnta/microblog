@@ -2,8 +2,7 @@ name: Run security tests
 
 on:
   workflow_call:
-  release:
-    types: [push]
+  push:
 
 jobs:
   cs:
