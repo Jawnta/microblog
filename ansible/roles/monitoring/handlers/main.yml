@@ -1,0 +1,13 @@
+---
+- name: restart docker-compose
+  ansible.builtin.command:
+    cmd: docker-compose up -d
+    chdir: "/home/{{ server_user }}/"
+- name: restart prometheus
+  ansible.builtin.command:
+    cmd: docker-compose restart prometheus
+    chdir: "/home/{{ server_user }}/"
+- name: restart alertmanager
+  ansible.builtin.command:
+    cmd: docker-compose restart alertmanager
+    chdir: "/home/{{ server_user }}/"

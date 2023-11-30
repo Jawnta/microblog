@@ -21,3 +21,6 @@ server_user: "deploy"
 server_user_pass: dbwebbDevops # change me
 server_user_groups:
     -   sudo
+
+grafana_admin_user: admin
+grafana_admin_password: admin

@@ -1,4 +1,8 @@
 version: "3.9"
+
+networks:
+  monitor:
+
 services:
   app:
     image: prod
@@ -13,7 +17,8 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       DATABASE_URL: mysql+pymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db/${MYSQL_DATABASE}
-      
+    networks:
+      - monitor  
     ports:
       - "8000:5000"
 
@@ -22,23 +27,25 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - monitor
     ports:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
-  test:
-    image: test
-    build:
-      context: .
-      dockerfile: docker/Dockerfile_test
-    volumes:
-      - ./app:/microblog/app
-      - ./tests:/microblog/tests
-    depends_on:
-      - db
-    command: ["./test_startup.sh"]
+  # test:
+  #   image: test
+  #   build:
+  #     context: .
+  #     dockerfile: docker/Dockerfile_test
+  #   volumes:
+  #     - ./app:/microblog/app
+  #     - ./tests:/microblog/tests
+  #   depends_on:
+  #     - db
+  #   command: ["./test_startup.sh"]
 
 volumes:
   db_data:

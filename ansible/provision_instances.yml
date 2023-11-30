@@ -10,12 +10,6 @@
         - include_vars: roles/provision_instances/vars/main.yml
         - include_tasks: roles/provision_instances/tasks/add_vms_as_hosts.yml
 
-
-
-
-
-
-
 -   name: create networks
     hosts: local
     gather_facts: False
@@ -23,7 +17,6 @@
         -   include_tasks: roles/provision_instances/tasks/vnet.yml
     collections:
         - azure.azcollection
-
 
 # Here we utilize that we added each instance to hosts.
 -   hosts: devops

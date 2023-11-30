@@ -1,0 +1,71 @@
+---
+- name: Install Docker Compose
+  ansible.builtin.get_url:
+    url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}"
+    dest: "/usr/local/bin/docker-compose"
+    mode: '0755'
+
+- name: Copy docker-compose file
+  ansible.builtin.copy:
+    src: "templates/docker-compose.yml"
+    dest: "/home/{{ server_user }}/docker-compose.yml"
+    mode: '0644'
+  notify: restart docker-compose
+
+- name: Copy Prometheus config file
+  ansible.builtin.copy:
+    src: "templates/prometheus.yml"
+    dest: "/home/{{ server_user }}/prometheus.yml"
+    mode: '0644'
+  notify: restart prometheus
+
+- name: Copy Alertmanager config file
+  ansible.builtin.copy:
+    src: "templates/alertmanager.yml"
+    dest: "/home/{{ server_user }}/alertmanager.yml"
+    mode: '0644'
+  notify: restart alertmanager
+
+- name: Run docker-compose
+  ansible.builtin.command:
+    cmd: docker-compose up -d
+    chdir: "/home/{{ server_user }}/"
+  args:
+    creates: "/home/{{ server_user }}/docker-compose.yml"
+
+- name: Prometheus as data source
+  community.grafana.grafana_datasource:
+    url: "http://grafana:3000" 
+    name: prometheus
+    ds_type: "prometheus"
+    ds_url: "http://prometheus:9090" 
+    grafana_user: "{{ grafana_admin_user }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    state: present
+
+- name: Flask Dashboard Grafana
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://grafana:3000" 
+    grafana_user: "{{ grafana_admin_user }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    path: "/home/{{ server_user }}/flask_dashboard.json"
+    overwrite: true
+    state: present
+
+- name: Node exporter Dashboard Grafana
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://grafana:3000" 
+    grafana_user: "{{ grafana_admin_user }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    path: "/home/{{ server_user }}/node_exporter_dashboard.json"
+    overwrite: true
+    state: present
+
+- name: Nginx Dashboard Grafana
+  community.grafana.grafana_dashboard:
+    grafana_url: "http://grafana:3000"
+    grafana_user: "{{ grafana_admin_user }}"
+    grafana_password: "{{ grafana_admin_password }}"
+    path: "/home/{{ server_user }}/nginx_dashboard.json"
+    overwrite: true
+    state: present

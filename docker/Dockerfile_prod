@@ -17,7 +17,7 @@ COPY app app
 COPY migrations migrations
 COPY requirements requirements
 COPY requirements.txt microblog.py boot.sh ./
-
+COPY gunicorn_config.py gunicorn_config.py
 # Set up virtual environment and upgrade pip and setuptools within it
 RUN python -m venv .venv \
     && .venv/bin/pip install --upgrade pip setuptools \
@@ -35,6 +35,8 @@ HEALTHCHECK --interval=5m --timeout=3s \
 RUN chmod +x boot.sh && chown -R microblog:microblog ./
 
 USER microblog
+
+ENV prometheus_multiproc_dir /tmp
 
 EXPOSE 5000
 ENTRYPOINT ["./boot.sh"]
