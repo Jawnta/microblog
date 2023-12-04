@@ -27,7 +27,7 @@ services:
       - monitor
 
   prometheus:
-    image: prom/prometheus:v2.31.1
+    image: prom/prometheus
     restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
@@ -46,10 +46,11 @@ services:
       - "9090:9090"
 
   grafana:
-    image: grafana/grafana:8.2.4
+    image: grafana/grafana
     restart: unless-stopped
     volumes:
       - grafana-data2:/var/lib/grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini
     networks:
       - monitor
     ports:
