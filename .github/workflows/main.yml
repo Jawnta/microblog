@@ -17,6 +17,9 @@ jobs:
       with:
         python-version: 3.8
 
+    - name: Set Prometheus environment variable
+      run: echo "PROMETHEUS_MULTIPROC_DIR=/tmp" >> $GITHUB_ENV
+
     - name: Install Testing Dependencies
       run: pip install -r requirements/test.txt
 

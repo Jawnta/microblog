@@ -1,5 +1,26 @@
 # Changelog for microblog
 
+## [0.3.0]
+### Added
+- Add 'docker_install' role in ansible for loadbalancer.yml to enhance functionality.
+- Check for existing SSL certificate before obtaining a new one in ansible/loadbalancer.
+- Remove unnecessary space in proxy_pass directive in ansible/loadbalancer for style consistency.
+- Add 'EXPORTER' rule in ansible/security_groups for monitoring support.
+- Switch Prometheus configuration to templating for dynamic content in monitoring/main.yml.
+- Add rules config file for enhanced monitoring in monitoring/main.yml.
+- Introduce Grafana settings via grafana.ini template in monitoring/main.yml.
+- Add multiple Grafana dashboards for better metrics visualization in monitoring/main.yml.
+- Add alertmanager.yml template for webhook integration in monitoring.
+- Update Prometheus and Grafana images in docker-compose.yml for monitoring.
+- Mount grafana.ini in Grafana service for custom configuration in monitoring.
+- Introduce prometheus.yml.j2 template with dynamic scrape configs in monitoring.
+- Add json files for dashboard, nginx, flask, and node exporter in dashboards.
+
+### Refactored
+- Change docker-compose command to use sudo for better permissions management in monitoring/main.yml.
+- Update Grafana data source and dashboard URLs for consistency in monitoring/main.yml.
+- Implement a pause before starting Grafana to ensure service readiness in monitoring/main.yml.
+
 ## [0.2.3]
 ### Fixed
 - Update Flask-Login to version 0.6.3 in `prod.txt`.
