@@ -1,23 +1,23 @@
 # Changelog for microblog
 
-## [0.3.0] [Release]
+## [0.3.0]
 ### Added
-- feat(ansible): add 'docker_install' role to loadbalancer.yml for enhanced functionality.
-- feat(ansible/loadbalancer): check for existing SSL certificate before obtaining a new one.
-- style(ansible/loadbalancer): remove unnecessary space in proxy_pass directive for consistency.
-- feat(ansible/security_groups): add 'EXPORTER' rule to security groups for monitoring support.
-- feat(monitoring/main.yml): switch Prometheus config to templating for dynamic content.
-- feat(monitoring/main.yml): add rules config file for enhanced monitoring.
-- feat(monitoring/main.yml): introduce Grafana settings via grafana.ini template.
-- feat(monitoring/main.yml): add multiple Grafana dashboards for better metrics visualization.
-- refactor(monitoring/main.yml): change docker-compose command to use sudo for better permissions management.
-- refactor(monitoring/main.yml): update Grafana data source and dashboard URLs for consistency.
-- feat(monitoring/main.yml): implement a pause before starting Grafana to ensure service readiness.
-- feat(monitoring): add alertmanager.yml template for webhook integration.
-- feat(monitoring): update Prometheus and Grafana images in docker-compose.yml.
-- feat(monitoring): mount grafana.ini in Grafana service for custom configuration.
-- feat(monitoring): introduce prometheus.yml.j2 template with dynamic scrape configs.
-- feat(dashboards): Added json files for dashboard, nginx, flask, and node exporter.
+- Ansible: Introduced 'docker_install' role in loadbalancer.yml for enhanced functionality.
+- Ansible/Loadbalancer: Added check for existing SSL certificate before obtaining a new one.
+- Ansible/Security Groups: Implemented 'EXPORTER' rule in security groups for monitoring support.
+- Monitoring: Added alertmanager.yml template for webhook integration.
+- Monitoring: Updated Prometheus and Grafana images in docker-compose.yml.
+- Monitoring: Mounted grafana.ini in Grafana service for custom configuration.
+- Monitoring: Introduced prometheus.yml.j2 template with dynamic scrape configurations.
+- Dashboards: Added json files for dashboard, nginx, flask, and node exporter.
+
+### Refactored
+- Monitoring/Main.yml: Changed docker-compose command to use sudo for better permissions management.
+- Monitoring/Main.yml: Updated Grafana data source and dashboard URLs for consistency.
+- Monitoring/Main.yml: Implemented a pause before starting Grafana to ensure service readiness.
+
+### Style
+- Ansible/Loadbalancer: Removed unnecessary space in proxy_pass directive for consistency.
 
 ## [0.2.3]
 ### Fixed
