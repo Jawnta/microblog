@@ -13,9 +13,16 @@
   notify: restart docker-compose
 
 - name: Copy Prometheus config file
-  ansible.builtin.copy:
-    src: "templates/prometheus.yml"
+  ansible.builtin.template:
+    src: "templates/prometheus.yml.j2"
     dest: "/home/{{ server_user }}/prometheus.yml"
+    mode: '0644'
+  notify: restart prometheus
+
+- name: Copy rules config file
+  ansible.builtin.copy:
+    src: "templates/rules.yml"
+    dest: "/home/{{ server_user }}/rules.yml"
     mode: '0644'
   notify: restart prometheus
 
@@ -26,16 +33,40 @@
     mode: '0644'
   notify: restart alertmanager
 
+- name: Copy grafana.ini to server
+  ansible.builtin.template:
+    src: templates/grafana.ini
+    dest: /home/{{ server_user }}/grafana.ini
+
+- name: Copy Nginx dashboard to server
+  copy:
+    src: templates/nginx_dashboard.json
+    dest: /home/{{ server_user }}/nginx_dashboard.json
+
+- name: Copy flask dashboard to server
+  copy:
+    src: templates/flask_dashboard.json
+    dest: /home/{{ server_user }}/flask_dashboard.json
+
+- name: Copy node exporter dashboard to server
+  copy:
+    src: templates/node_exporter_dashboard.json
+    dest: /home/{{ server_user }}/node_exporter_dashboard.json
+
+
 - name: Run docker-compose
   ansible.builtin.command:
-    cmd: docker-compose up -d
+    cmd: sudo docker-compose up -d
     chdir: "/home/{{ server_user }}/"
-  args:
-    creates: "/home/{{ server_user }}/docker-compose.yml"
+  become: true
 
-- name: Prometheus as data source
+- name: Wait for a few seconds for starting grafana
+  pause:
+    seconds: 60
+
+- name: Add Prometheus as a data source in Grafana
   community.grafana.grafana_datasource:
-    url: "http://grafana:3000" 
+    url: "http://0.0.0.0:3000" 
     name: prometheus
     ds_type: "prometheus"
     ds_url: "http://prometheus:9090" 
@@ -43,9 +74,11 @@
     grafana_password: "{{ grafana_admin_password }}"
     state: present
 
+
+
 - name: Flask Dashboard Grafana
   community.grafana.grafana_dashboard:
-    grafana_url: "http://grafana:3000" 
+    grafana_url: "http://0.0.0.0:3000" 
     grafana_user: "{{ grafana_admin_user }}"
     grafana_password: "{{ grafana_admin_password }}"
     path: "/home/{{ server_user }}/flask_dashboard.json"
@@ -54,7 +87,7 @@
 
 - name: Node exporter Dashboard Grafana
   community.grafana.grafana_dashboard:
-    grafana_url: "http://grafana:3000" 
+    grafana_url: "http://0.0.0.0:3000" 
     grafana_user: "{{ grafana_admin_user }}"
     grafana_password: "{{ grafana_admin_password }}"
     path: "/home/{{ server_user }}/node_exporter_dashboard.json"
@@ -63,7 +96,7 @@
 
 - name: Nginx Dashboard Grafana
   community.grafana.grafana_dashboard:
-    grafana_url: "http://grafana:3000"
+    grafana_url: "http://0.0.0.0:3000"
     grafana_user: "{{ grafana_admin_user }}"
     grafana_password: "{{ grafana_admin_password }}"
     path: "/home/{{ server_user }}/nginx_dashboard.json"

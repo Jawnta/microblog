@@ -1,0 +1,7 @@
+route:
+  receiver: webhook_receiver
+receivers:
+  - name: webhook_receiver
+    webhook_configs:
+      - url: 'https://webhook.site/c0aedd9a-cfea-4d06-b5cd-e4c4035bffca'
+        send_resolved: false
