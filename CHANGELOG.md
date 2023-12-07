@@ -1,5 +1,10 @@
 # Changelog for microblog
 
+## [0.3.1]
+### Chore
+- Update database.yml and integrate New Relic installation in ansible.
+- Include New Relic installation role and configure necessary environment variables in database.yml.
+
 ## [0.3.0]
 ### Added
 - Add 'docker_install' role in ansible for loadbalancer.yml to enhance functionality.
