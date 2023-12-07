@@ -8,3 +8,17 @@
   roles:
     - docker_install
     - database
+    - role: newrelic.newrelic_install
+      vars:
+        targets:
+          - infrastructure
+          - mysql
+        install_timeout_seconds: 1000
+  environment:
+    NEW_RELIC_API_KEY: "APIKEY"
+    NEW_RELIC_ACCOUNT_ID: "ID"
+    NEW_RELIC_REGION: "EU"
+    NEW_RELIC_MYSQL_PORT: 3306
+    NEW_RELIC_MYSQL_USERNAME: microblog-DB_USER
+    NEW_RELIC_MYSQL_PASSWORD: dettaervoratpw
+    NEW_RELIC_MYSQL_ROOT_PASSWORD: dbwebbDevops
